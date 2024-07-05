@@ -14,7 +14,6 @@ const App = () => {
   });
 
   useEffect(() => {
-    console.log('Loaded searches from localStorage:', recentSearches);
     localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
   }, [recentSearches]);
 
@@ -29,7 +28,6 @@ const App = () => {
           if (updatedSearches.length > 5) {
             updatedSearches.shift();
           }
-          console.log('Updated searches:', updatedSearches);
           return updatedSearches;
         });
         setCityName('');
@@ -54,8 +52,6 @@ const App = () => {
       setLoading(false);
     }
   };
-
-  console.log('Recent searches state:', recentSearches);
 
   return (
     <div className="container">
