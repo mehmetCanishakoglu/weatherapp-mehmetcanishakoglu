@@ -12,10 +12,21 @@ const App = () => {
     const savedSearches = localStorage.getItem('recentSearches');
     return savedSearches ? JSON.parse(savedSearches) : [];
   });
+  const [unit, setUnit] = useState(() => {
+    return localStorage.getItem('unit') || 'C';
+  });
 
   useEffect(() => {
     localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
   }, [recentSearches]);
+
+  useEffect(() => {
+    localStorage.setItem('unit', unit);
+  }, [unit]);
+
+  const toggleUnit = () => {
+    setUnit((prevUnit) => (prevUnit === 'C' ? 'F' : 'C'));
+  };
 
   const fetchData = async (e) => {
     if (e.key === 'Enter') {
@@ -66,6 +77,9 @@ const App = () => {
           onChange={(e) => setCityName(e.target.value)}
           onKeyDown={fetchData}
         />
+        <button className="toggle-button" onClick={toggleUnit}>
+          Toggle to {unit === 'C' ? 'Fahrenheit' : 'Celsius'}
+        </button>
         {loading && <div className="loading">Loading...</div>}
         {error && <div className="error">{error}</div>}
         {weatherData && (
@@ -75,7 +89,7 @@ const App = () => {
               {weatherData.location.country}
             </h2>
             <p>
-              Temperature: {weatherData.current.temp_c} °C / {weatherData.current.temp_f} °F
+              Temperature: {unit === 'C' ? weatherData.current.temp_c : weatherData.current.temp_f} °{unit}
             </p>
             <p>Condition: {weatherData.current.condition.text}</p>
             <img
